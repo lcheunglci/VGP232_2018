@@ -50,7 +50,7 @@ namespace HelloConsole
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
 
             sb.Append(path);
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10; i++)
             {
                 sb.Append(i);
             }
@@ -81,7 +81,39 @@ namespace HelloConsole
 
             Console.WriteLine(character);
 
+            int uNumber = 0;
+            MakeChangesToThis(ref uNumber);
+
+            MakeSomething(out uNumber);
+
+            Foo(1);
+            Foo(1, 1.1f);
+
+            SomeFunctionA(price: 12, number: 1);
+
             Console.ReadKey();
         }
+
+        static void Foo(int number, float price = 0.1f)
+        {
+
+        }
+
+        static void SomeFunctionA(int number, float price = 0.0f, float something = 0.0f, float something2 = 0.0f)
+        {
+
+        }
+
+
+        static void MakeChangesToThis(ref int someNumber)
+        {
+
+        }
+
+        static void MakeSomething(out int someNumber)
+        {
+            someNumber = 10;
+        }
+
+        }
     }
-}
