@@ -18,8 +18,8 @@ namespace HelloConsole
             bool displayCount = false;
             bool sumEnabled = false;
             float sum = 0f;
-            
-            List<float> results = new List<float>();
+
+            ItemCollection results = new ItemCollection();
 
             // TODO: check if there is more than 1 argument, if not perform a different flow
 
@@ -33,7 +33,7 @@ namespace HelloConsole
                     {
                         Console.Write("Path to input: ");
                         inputFile = Console.ReadLine();
-                        results = Parse(inputFile);
+                        results.Parse(inputFile);
                     }
 
                     if (string.IsNullOrEmpty(outputFile))
@@ -88,7 +88,7 @@ namespace HelloConsole
                         }
                         else
                         {
-                            results = Parse(inputFile);
+                            results.Parse(inputFile);
                         }
                     }
                 }
@@ -129,44 +129,14 @@ namespace HelloConsole
 
             if (sumEnabled)
             {
-                for (int i = 0; i < results.Count; i++)
-                {
-                    sum += results[i];
-                }
+                sum = results.CompleteTotal;
             }
 
             if (results.Count > 0)
             {
                 if (!string.IsNullOrEmpty(outputFile))
                 {
-                    FileStream fs;
-
-                    if (append && File.Exists((outputFile)))
-                    {
-                        fs = File.Open(outputFile, FileMode.Append);
-                    }
-                    else
-                    {
-                        fs = File.Open(outputFile, FileMode.Create);
-                    }
-
-                    using (StreamWriter writer = new StreamWriter(fs))
-                    {
-                        if (displayCount)
-                        {
-                            writer.WriteLine("There are {0} entries", results.Count);
-                        }
-
-                        if (sumEnabled)
-                        {
-                            writer.WriteLine("Sum of all the values is {0}", sum);
-                        }
-
-                        for (int i = 0; i < results.Count; i++)
-                        {
-                            writer.WriteLine(results[i]);
-                        }
-                    }
+                    results.Save(outputFile, append, displayCount, sumEnabled);
                 }
                 else
                 {
@@ -189,38 +159,5 @@ namespace HelloConsole
             Console.WriteLine("Done!");
         }
         
-        public static List<float> Parse(string fileName)
-        {
-            List<float> outputList = new List<float>();
-
-            // TODO: implement the streamreader that reads the file and appends each line to the list
-            // note that the result that you get from using read is a string, and needs to be parsed to an float i.e. float.Parse()
-            // and if the results cannot be parsed it will throw an exception
-
-            // streamreader https://msdn.microsoft.com/en-us/library/system.io.streamreader(v=vs.110).aspx
-
-            // Use string split https://msdn.microsoft.com/en-us/library/system.string.split(v=vs.110).aspx
-
-            StreamReader reader = new StreamReader(fileName);
-
-            string line = reader.ReadLine();
-            line = reader.ReadLine();
-            //while (reader.Peek() != 0)
-            while (line != null)
-            {
-                //"Endive,76,0.22"
-                string[] tokens = line.Split(',');
-
-                int quantity = int.Parse(tokens[1]);
-                float price = float.Parse(tokens[2]);
-
-                float subTotal = quantity * price;
-
-                outputList.Add(subTotal);
-                line = reader.ReadLine();
-            }
-
-            return outputList;
-        }
     }
 }
